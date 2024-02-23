@@ -25,6 +25,11 @@ class ProfileRequest extends FormRequest
             'full_name' => 'required',
             'email' => 'required',
             'photo' => 'nullable|mimes:jpeg,png,jpg,',
+            'profession' => 'nullable|max:60',
+            'about' => 'nullable|max:255',
+            'twitter' => 'nullable|url', 
+            'linkedin' => 'nullable|url',
+            'facebook' => 'nullable|url',
         ];
     }
 }
