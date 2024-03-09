@@ -39,7 +39,7 @@
     </div>
     @yield('scripts')
     <!-- Scripts de bootstrap -->
-    <script src="{{ mix('resources/js/app.js') }}"></script>
+    <script src="{{ asset('resources/js/bootstrap.js') }}"></script>
 </body>
 
 </html>

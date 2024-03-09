@@ -43,6 +43,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    //Crear un perfil cuando se crea un usuario
+    protected static function boot(){
+        parent::boot();
+        //Asignar perfil al registrar el usuario
+        static::created(function($user){
+            $user->profile()->create();
+        });
+    }
+
     //relacion 1:1 user-profile
     public function profile(){
         return $this->hasOne(Profile::class);

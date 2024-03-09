@@ -69,7 +69,7 @@ class ArticleController extends Controller
     {
         $comments = $article->comments()->simplePaginate(5);
 
-        return view('subscriber.articles.show', compact('articles', 'comments'));
+        return view('subscriber.articles.show', compact('article', 'comments'));
     }
 
     /**
