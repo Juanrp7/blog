@@ -26,42 +26,52 @@ class ProfileController extends Controller
      */
     public function edit(Profile $profile)
     {
+        $this->authorize('view', $profile);
         return view('subscriber.profiles.edit', compact('profile'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProfileRequest $request, Profile $profile)
-    {
-        $user = Auth::user();
-        if($request->hasFile('photo')){
-            //Eliminar foto anterior
-            File::delete(public_path('storage/'.$profile->photo));
-            //Asignar nueva foto
-            $photo = $request['photo']->store('profiles');
-        }else{
-            $photo = $user->profile->photo;
-        }
+    public function update(ProfileRequest $request, Profile $profile){
 
-        //Asignar nombre y correo
-        $user->full_name = $request->full_name;
-        $user->email = $request->email;
-        //Asignar campos adicionales 
-        $user->profile->profession = $request->profession;
-        $user->profile->about = $request->about;
-        $user->profile->photo = $photo;
-        $user->profile->twitter = $request->twitter;
-        $user->profile->linkedin = $request->linkedin;
-        $user->profile->facebook = $request->facebook;
-        //Guardar cambios
-        $user->save(); 
-        //Asignar foto
-        $user->profile->photo = $photo;
-        //Guardar campos de perfil
-        $user->profile->save();
+        try{
+
+            $this->authorize('update', $profile); //Esto es para el ProfielPolicy en el metodo update
+
+            $user = Auth::user();
+            if($request->hasFile('photo')){
+                //Eliminar foto anterior
+                File::delete(public_path('storage/'.$profile->photo));
+                //Asignar nueva foto
+                $photo = $request['photo']->store('profiles');
+            }else{
+                $photo = $user->profile->photo;
+            } 
+
+            //Asignar nombre y correo
+            $user->full_name = $request->full_name;
+            $user->email = $request->email;
+            //Asignar campos adicionales 
+            $user->profile->profession = $request->profession;
+            $user->profile->about = $request->about;
+            $user->profile->photo = $photo;
+            $user->profile->twitter = $request->twitter;
+            $user->profile->linkedin = $request->linkedin;
+            $user->profile->facebook = $request->facebook;
+            //Guardar cambios
+            $user->save(); 
+            //Asignar foto
+            $user->profile->photo = $photo;
+            //Guardar campos de perfil
+            $user->profile->save();
+            
+            return redirect()->route('profiles.edit', $user->profile->id);
+
+        }catch(\EXCEPTION $e){
+            return $e;
+        }
         
-        return redirect()->route('profiles.edit', $user->profile->id);
     }
 
 }

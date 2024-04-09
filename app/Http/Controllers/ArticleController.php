@@ -58,7 +58,7 @@ class ArticleController extends Controller
 
         //Redireccionar al index de articulos
         return redirect()->action([ArticleController::class, 'index'])
-                        ->with('succes-create', 'Articulo creado correctamente');
+                        ->with('success-create', 'Articulo creado correctamente');
 
     }
 
@@ -67,6 +67,8 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        $this->authorize('published', $article);
+
         $comments = $article->comments()->simplePaginate(5);
 
         return view('subscriber.articles.show', compact('article', 'comments'));
@@ -77,6 +79,8 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        $this->authorize('view', $article);
+
         //obtener categorias publicas
         $categories =  Category::select(['id', 'name'])
                         ->where('status', '1')
@@ -90,8 +94,8 @@ class ArticleController extends Controller
      */
     public function update(ArticleRequest $request, Article $article)
     {
+        $this->authorize('update', $article);
         //Si el usuario sube una nueva imagen
-
         if($request->hasFile('image')){
             //Eliminar la imagen anterior
             File::delete(public_path('storage/'.$article->image));
@@ -113,7 +117,7 @@ class ArticleController extends Controller
         );
 
         return redirect()->action([ArticleController::class, 'index'])
-                        ->with('succes-update', 'Articulo modificado correctamente');
+                        ->with('success-update', 'Articulo modificado correctamente');
 
     }
 
@@ -122,6 +126,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        $this->authorize('delete', $article);
         //Eliminar la imagen
         if($article->image){
             File::delete(public_path('storage/'.$article->image));
@@ -131,7 +136,7 @@ class ArticleController extends Controller
         $article->delete();
 
         return redirect()->action([ArticleController::class, 'index'], compact('article'))
-                        ->with('succes-delete', 'Articulo eliminado correctamente');
+                        ->with('success-delete', 'Articulo eliminado correctamente');
         
         
     }

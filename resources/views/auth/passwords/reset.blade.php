@@ -1,11 +1,12 @@
-@extends()
+@extends('layouts.base')
 
 @section('styles')
+<link rel="stylesheet" href="{{ asset('css/login/css/reset.css') }}">
 @endsection
 
 @section('content')
 
-<form method="POST" class="form" action="#">
+<form method="POST" class="form" action="{{ route('password.update') }}">
     @csrf
     
     <input type="hidden" name="token" value="{{ $token }}">
@@ -13,7 +14,7 @@
     <h2 class="reset-title">Crear contraseña</h2>
 
     <div class="content-reset">
-        <input class="form-email" id="email" type="email" name="email" placeholder="Ingrese el correo electrónico" value="" required>
+        <input class="form-email" id="email" type="email" name="email" placeholder="Ingrese el correo electrónico" value="{{ $email ?? old('email')}}" required>
 
         @error('email')
         <span class="text-danger">

@@ -102,6 +102,8 @@ class CategoryController extends Controller
     //Filtrar articulos por categorias
     public function detail(Category $category){
 
+        $this->authorize('published', $category);
+
         $articles = Article::where([
             ['category_id', $category->id],
             ['status', '1']

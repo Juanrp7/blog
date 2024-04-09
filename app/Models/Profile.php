@@ -16,8 +16,6 @@ class Profile extends Model
 
     //Relacion 1:1 inversa (prfile-user)
     public function user(){
-        return $this->hasOne(Profile::class);
+        return $this->belongsTo(User::class);
     }
-
-    
 }

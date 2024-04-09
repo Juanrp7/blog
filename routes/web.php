@@ -4,6 +4,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
@@ -13,20 +14,28 @@ use App\Http\Controllers\HomeController;
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/all', [HomeController::class, 'all'])->name('home.all');
 
-//Articulos
-Route::resource('articles', ArticleController::class)
-                ->except('show')
-                ->names('articles');
+//Administrador
+Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 
-//Categorias
-Route::resource('categories', CategoryController::class)
-                ->except('show')
-                ->names('categories');
+//Rutas del admin
+Route::namespace('App\Http\Controllers')->prefix('admin')->group(function(){
 
-//Comentarios
-Route::resource('comments', CommentController::class)
-                ->only('index', 'destroy')
-                ->names('comments');
+    //Articulos
+    Route::resource('articles', 'ArticleController')
+                    ->except('show')
+                    ->names('articles');
+
+    //Categorias
+    Route::resource('categories', 'CategoryController')
+                    ->except('show')
+                    ->names('categories');
+
+    //Comentarios
+    Route::resource('comments', 'CommentController')
+                    ->only('index', 'destroy')
+                    ->names('comments');
+});
+
 
 //Perfiles
 Route::resource('profiles', ProfileController::class)
@@ -40,7 +49,7 @@ Route::get('article/{article}', [ArticleController::class, 'show'])->name('artic
 Route::get('category/{category}', [CategoryController::class, 'detail'])->name('categories.detail');
 
 //Guardar comentarios
-Route::get('/comment', [CommentController::class, 'store'])->name('comments.store');
+Route::post('/comment', [CommentController::class, 'store'])->name('comments.store');
 
 
 // Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');

@@ -3,7 +3,7 @@
 
         <div class="logo">
             <!--Logo-->
-            <a href="#"><img src="{{ asset('css/img/logo.png') }}" alt="Logo"></a>
+            <a href="{{route('home.index')}}"><img src="{{ asset('css/img/logo.png') }}" alt="Logo"></a>
         </div>
 
         @guest
@@ -14,8 +14,7 @@
 
         @else
         <div class="dropdown">
-            <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" 
-               data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
 
                 <img src="{{ Auth::user()->profile->photo ? asset('storage/' . Auth::user()->profile->photo) : asset('css/img/user-default.png')}}" alt="Profile" class="img-profile">
                 <span class="name-user">{{ Auth::user()->full_name }}</span>
@@ -24,16 +23,16 @@
 
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <li><a class="dropdown-item"
-                        href="#">Perfil</a></li>
+                        href="{{ route('profiles.edit',['profile' => Auth::user()->id]) }}">Perfil</a></li>
                 
-                <li><a class="dropdown-item" href="#">Ir al admin</a></li>
+                <li><a class="dropdown-item" href="{{ route('admin.index') }}">Ir al admin</a></li>
                 
                 <li>
                     <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">
                     @csrf
                     </form>
                     <a class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); 
-                           document.getElementById('logout-form').submit();">Salir</a>
+                        document.getElementById('logout-form').submit();">Salir</a>
                 </li>
             </ul>
         </div>

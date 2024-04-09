@@ -18,13 +18,13 @@ class CommentController extends Controller
     public function index()
     {
         $comments = DB::table('comments')
-                ->join('articles', 'comments.articles_id', '=', 'articles.id')
+                ->join('articles', 'comments.article_id', '=', 'articles.id')
                 ->join('users', 'comments.user_id', '=', 'users.id')
-                ->select('comments.value', 'comments.description', 'articles.title', 'user.full_name')
+                ->select('comments.id','comments.value', 'comments.description', 'articles.title', 'users.full_name')
                 ->where('articles.user_id', '=', Auth::user()->id)
                 ->orderBy('articles.id', 'desc')
                 ->get();
-
+        
         return view('admin.comments.index', compact('comments'));
     }
 
@@ -50,7 +50,7 @@ class CommentController extends Controller
 
         //Si no existe y si el estado del articulo es pubico, comentar.
         if(!$result and $article->status == 1){
-            Comment::created([
+            Comment::create([
                 'value' => $request->value,
                 'description' => $request->description,
                 'user_id' => Auth::user()->id,
@@ -61,7 +61,7 @@ class CommentController extends Controller
         
         }else{
             return redirect()->action([ArticleController::class, 'show'], [$article->slug])
-                                ->with('succes-error', 'Solo puedes comentar una vez');
+                                ->with('success-error', 'Solo puedes comentar una vez');
         }
 
     }
