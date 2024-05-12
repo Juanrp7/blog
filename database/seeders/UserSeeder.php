@@ -18,13 +18,13 @@ class UserSeeder extends Seeder
             'full_name' => 'Paula Muñoz',
             'email' => 'paula@gmail.com',
             'password' => Hash::make('12345678')
-        ]);
+        ])->assignRole('Administrator');
 
         User::create([
             'full_name' => 'Jon Doe',
             'email' => 'jondoe@gmail.com',
             'password' => Hash::make('123456789')
-        ]);
+        ])->assignRole('Author');
 
         //Crea 10 registros en la tabla users aletoriamente
         User::factory(10)->create();

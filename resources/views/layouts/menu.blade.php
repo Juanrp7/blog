@@ -25,7 +25,10 @@
                 <li><a class="dropdown-item"
                         href="{{ route('profiles.edit',['profile' => Auth::user()->id]) }}">Perfil</a></li>
                 
-                <li><a class="dropdown-item" href="{{ route('admin.index') }}">Ir al admin</a></li>
+                @can('admin.index')
+                <li><a class="dropdown-item" href="{{ route('admin.index') }}">Ir al admin</a></li>    
+                @endcan
+                
                 
                 <li>
                     <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">

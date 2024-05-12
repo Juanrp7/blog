@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\File;
 class ProfileController extends Controller
 {
 
+    //Proteger rutas
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function show(Profile $profile){
         $article = Article::where([
             ['user_id', $profile->user_id],

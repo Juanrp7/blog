@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Profile;
 use Illuminate\Database\Seeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
@@ -36,8 +37,9 @@ class DatabaseSeeder extends Seeder
         Storage::makeDirectory('profile');
 
         //Llamar al seeder
+        $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
-
+        
         //Llamar Factorty
         Category::factory(8)->create();
         Article::factory(20)->create();

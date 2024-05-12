@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
@@ -15,7 +16,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/all', [HomeController::class, 'all'])->name('home.all');
 
 //Administrador
-Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
+Route::get('/admin',[AdminController::class,'index'])
+                    ->middleware('can:admin.index')
+                    ->name('admin.index');
 
 //Rutas del admin
 Route::namespace('App\Http\Controllers')->prefix('admin')->group(function(){
@@ -34,6 +37,17 @@ Route::namespace('App\Http\Controllers')->prefix('admin')->group(function(){
     Route::resource('comments', 'CommentController')
                     ->only('index', 'destroy')
                     ->names('comments');
+
+    //Usuarios
+    Route::resource('users', 'UserController')
+                    ->except('create', 'store', 'show')//estas rutas no se generan
+                    ->names('users');
+
+    //Roles
+    Route::resource('roles', 'RoleController')
+                    ->except('show')
+                    ->names('roles');
+
 });
 
 

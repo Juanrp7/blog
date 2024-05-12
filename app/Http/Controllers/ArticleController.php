@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\File;
 
 class ArticleController extends Controller
 {
+    //Proteger rutas
+    public function __construct() {
+        $this->middleware('can:articles.index')->only('index');
+        $this->middleware('can:articles.create')->only('create', 'store');
+        $this->middleware('can:articles.edit')->only('edit', 'update');
+        $this->middleware('can:articles.destroy')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
